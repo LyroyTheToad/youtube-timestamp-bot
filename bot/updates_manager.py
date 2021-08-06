@@ -84,7 +84,7 @@ def updates_manager(tg_update):
                 if command == "/start":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
-                        "text": "Send a message in the format ```<YouTube link> HH:MM:SS``` to get your modified YouTube link!",
+                        "text": "Send a message in the format  `<YouTube link\> HH:MM:SS `to get your modified YouTube link\!",
                         "parse_mode": "MarkdownV2"
                     })
 
@@ -97,9 +97,10 @@ def updates_manager(tg_update):
                 elif command == "/help":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
-                        "text": "You must use the format ```<YouTube link> HH:MM:SS```\n\nExapmle:\nhttps://youtu.be/dQw4w9WgXcQ 2:40\n\n"+
-                                "**IMPORTANT**\nThe bot __DOES NOT__ check if the timestamp overflows the duration of the video!",
-                        "parse_mode": "MarkdownV2"
+                        "text": "You must use the format  `<YouTube link\> HH:MM:SS`\n\nExample:\nhttps://youtu\.be/dQw4w9WgXcQ 2:47\n\n"+
+                                "❗️*IMPORTANT*❗️\nThe bot __DOES NOT__ check if the timestamp overflows the duration of the video\!",
+                        "parse_mode": "MarkdownV2",
+                        "disable_web_page_preview": True
                     })
 
 
@@ -113,7 +114,8 @@ def updates_manager(tg_update):
                         "chat_id": chat_id,
                         "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app." +
                                 "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic.\n\n" +
-                                "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me."
+                                "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me.1n" +
+                                "You can find the code here https://github.com/LyroyTheToad/youtube-timestamp-bot"
                     })
 
 
@@ -134,11 +136,31 @@ def updates_manager(tg_update):
                 # Elaborate message
                 message_text = message_text.split(" ")
                 yt_link = message_text[0]
-                time = re.split("\d?\d")
-                time = time[0] * 24 * 60 + time[1] * 60 + time[2]
+                time = re.split(":", message_text[1])
+                if len(time) == 1:
+                    time = int(time[0])
+                elif len(time) == 2:
+                    time = int(time[0]) * 60 + int(time[1])
+                else:
+                    time = int(time[0]) * 24 * 60 + int(time[1]) * 60 + int(time[2])
 
                 # Send response
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,
-                    "text": yt_link + "?t=" + time
+                    "text": yt_link + "?t=" + str(time)
+                })
+
+            
+
+
+
+
+            #
+            # Else (if the user has sent a random message)
+            #
+            else:
+                requests.get(TG_API + "/sendMessage", params={
+                    "chat_id": chat_id,
+                    "text": "Send a message in the format  `<YouTube link\> HH:MM:SS `to get your modified YouTube link\!",
+                    "parse_mode": "MarkdownV2"
                 })
