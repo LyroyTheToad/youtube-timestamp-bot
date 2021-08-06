@@ -84,7 +84,8 @@ def updates_manager(tg_update):
                 if command == "/start":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
-                        "text": "tutorial"
+                        "text": "Send a message in the format ```<YouTube link> HH:MM:SS``` to get your modified YouTube link!",
+                        "parse_mode": "MarkdownV2"
                     })
 
 
@@ -93,22 +94,51 @@ def updates_manager(tg_update):
                 #
                 # Help command
                 #
-                if command == "/help":
+                elif command == "/help":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
-                        "text": "tutorial"
+                        "text": "You must use the format ```<YouTube link> HH:MM:SS```\n\nExapmle:\nhttps://youtu.be/dQw4w9WgXcQ 2:40\n\n"+
+                                "**IMPORTANT**\nThe bot __DOES NOT__ check if the timestamp overflows the duration of the video!",
+                        "parse_mode": "MarkdownV2"
                     })
 
 
 
 
+                #
+                # About command
+                #
+                elif command == "/about":
+                    requests.get(TG_API + "/sendMessage", params={
+                        "chat_id": chat_id,
+                        "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app." +
+                                "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic.\n\n" +
+                                "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me."
+                    })
+
+
+
+
+
+
             #
-            # Else if the message follows the correct format (yt_link - HH:MM:SS)
+            # Else if it's a message that follows the correct format (yt_link - HH:MM:SS)
             #
-            elif re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s-\s[0-5]?\d(:[0-5]\d){0,2}$", message_text):
+
+            elif re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s[0-5]?\d(:[0-5]\d){0,2}$", message_text):
                 
                 #
                 # Send back modified link
                 #
 
-                message_text = message_text.split(" - ")
+                # Elaborate message
+                message_text = message_text.split(" ")
+                yt_link = message_text[0]
+                time = re.split("\d?\d")
+                time = time[0] * 24 * 60 + time[1] * 60 + time[2]
+
+                # Send response
+                requests.get(TG_API + "/sendMessage", params={
+                    "chat_id": chat_id,
+                    "text": yt_link + "?t=" + time
+                })
