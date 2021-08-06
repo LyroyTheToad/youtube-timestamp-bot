@@ -64,6 +64,7 @@ def updates_manager(tg_update):
     #
     # If the update comes from a chat
     #
+    
     if chat_id:
 
         #
@@ -81,6 +82,7 @@ def updates_manager(tg_update):
                 #
                 # Start command
                 #
+
                 if command == "/start":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
@@ -94,6 +96,7 @@ def updates_manager(tg_update):
                 #
                 # Help command
                 #
+
                 elif command == "/help":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
@@ -109,6 +112,7 @@ def updates_manager(tg_update):
                 #
                 # About command
                 #
+
                 elif command == "/about":
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
@@ -158,6 +162,7 @@ def updates_manager(tg_update):
             #
             # Else (if the user has sent a random message)
             #
+
             else:
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,

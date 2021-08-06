@@ -16,6 +16,7 @@ from threading import Thread
 # Telegram updates route
 #
 #
+
 @app.route("/" + TOKEN, methods=["GET", "POST"])
 def get_updates():
 
@@ -42,6 +43,7 @@ def get_updates():
 # Main route
 #
 #
+
 @app.route("/")
 def no():
     return "no", 200
