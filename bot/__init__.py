@@ -19,6 +19,7 @@ load_dotenv()
 
 PORT = os.environ["PORT"]
 TOKEN = os.environ["TOKEN"]
+DEBUG = bool(os.environ["DEBUG"])
 # Set first part of the API request URL
 TG_API = "https://api.telegram.org/bot" + TOKEN
 
