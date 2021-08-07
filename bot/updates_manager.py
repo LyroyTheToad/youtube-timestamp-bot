@@ -124,15 +124,17 @@ def updates_manager(tg_update):
         #
 
         elif re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s[0-5]?\d(:[0-5]\d){0,2}$", message_text):
-            
+
             #
-            # Send back modified link
+            # Elaborate message
             #
 
-            # Elaborate message
+            # Separate sections
             message_text = message_text.split(" ")
             yt_link = message_text[0]
             time = re.split(":", message_text[1])
+
+            # Calculate time in seconds
             if len(time) == 1:
                 time = int(time[0])
             elif len(time) == 2:
@@ -140,11 +142,29 @@ def updates_manager(tg_update):
             else:
                 time = int(time[0]) * 24 * 60 + int(time[1]) * 60 + int(time[2])
 
-            # Send response
-            requests.get(TG_API + "/sendMessage", params={
-                "chat_id": chat_id,
-                "text": yt_link + "?t=" + str(time)
-            })
+
+
+            #
+            # Check for link type
+            #
+
+            # If it's a short link
+            if yt_link.find("watch?=v") == -1:
+
+                # Send back modified link
+                requests.get(TG_API + "/sendMessage", params={
+                    "chat_id": chat_id,
+                    "text": yt_link + "?t=" + str(time)
+                })
+
+            # If it's a long link
+            else:
+                
+                # Send back modified link
+                requests.get(TG_API + "/sendMessage", params={
+                    "chat_id": chat_id,
+                    "text": yt_link + "&t=" + str(time)
+                })
 
         
 
