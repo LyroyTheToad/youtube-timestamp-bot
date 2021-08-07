@@ -110,7 +110,7 @@ def updates_manager(tg_update):
                     "chat_id": chat_id,
                     "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app." +
                             "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic.\n" +
-                            "This bot DOES NOT save any data and WILL NOT send you any ads\n\n" +
+                            "This bot DOES NOT save any data and WILL NOT send you any ads!\n\n" +
                             "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me.1n" +
                             "You can find the code here https://github.com/LyroyTheToad/youtube-timestamp-bot"
                 })
