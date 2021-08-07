@@ -151,7 +151,7 @@ def updates_manager(tg_update):
             #
 
             # If it's a short link
-            if yt_link.find("watch?=v") == -1:
+            if yt_link.find("/watch?v=") == -1:
 
                 # Send back modified link
                 requests.get(TG_API + "/sendMessage", params={
