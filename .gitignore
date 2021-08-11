@@ -1,7 +1,4 @@
 .env
-database.db
-database.db-journal
-commands.txt
 
 /venv
 /.vscode
