@@ -32,5 +32,6 @@ ALLOWED_UPDATES = json.dumps([
 #
 
 TOKEN = os.environ["TOKEN"]
+DEBUG_PRINTS = bool(os.environ["DEBUG_PRINTS"])
 # Set first part of the API request URL
 TG_API = "https://api.telegram.org/bot" + TOKEN

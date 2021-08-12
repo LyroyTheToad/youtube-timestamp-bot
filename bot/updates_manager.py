@@ -1,5 +1,5 @@
 # Package imports
-from bot import TG_API
+from bot import TG_API, DEBUG_PRINTS
 # Web tools imports
 import requests
 # Other imports
@@ -28,6 +28,20 @@ def updates_manager(tg_update):
         command = message_text
     else:
         command = None
+
+
+
+
+
+    
+    #
+    #
+    # Debug info
+    #
+    #
+
+    if DEBUG_PRINTS:
+        print("\nchat_id: " + str(chat_id) + "\nchat_type: " + str(chat_type) + "\nmessage_text: " + str(message_text) + "\ncommand: " + str(command))
 
 
 

@@ -1,7 +1,7 @@
 # Web tools imports
 import requests
 # Package imports
-from bot import TG_API, ALLOWED_UPDATES
+from bot import TG_API, ALLOWED_UPDATES, DEBUG_PRINTS
 from bot.updates_manager import updates_manager
 # Other imports
 from time import sleep
@@ -29,6 +29,10 @@ if __name__ == "__main__":
 
         # If there are any updates
         if tg_response["result"]:
+
+            if DEBUG_PRINTS:
+                print("\n\nUpdate:\n" + str(tg_response))
+
             # Elaborate each update one by one
             for tg_update in tg_response["result"]:
                 updates_manager(tg_update)
