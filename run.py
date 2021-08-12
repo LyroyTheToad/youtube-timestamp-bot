@@ -29,11 +29,10 @@ if __name__ == "__main__":
 
         # If there are any updates
         if tg_response["result"]:
-            print("Update!")
             # Elaborate each update one by one
             for tg_update in tg_response["result"]:
                 updates_manager(tg_update)
 
             latest_update_id = int(tg_response["result"][-1]["update_id"])
-            
+
         sleep(0.5)
