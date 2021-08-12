@@ -130,13 +130,15 @@ def updates_manager(tg_update):
             # Separate sections
             message_text = message_text.split(" ")
             video_id = groups.group(1)
-            params = groups.group(2)
+            # If there are no parameters set it an empty string
+            if not (link_params := groups.group(2)):
+                link_params = ""
             starting_time = re.split(":", message_text[1])
 
 
             # Remove every "t" parameter
-            while (t_param := re.search("&t=[^&]*", params)):
-                params = params.replace(t_param.group(), "")
+            while link_params and (t_param := re.search("&t=[^&]*", link_params)):
+                link_params = link_params.replace(t_param.group(), "")
 
 
             # Check for the YouTube link validity
@@ -176,7 +178,7 @@ def updates_manager(tg_update):
 
             requests.get(TG_API + "/sendMessage", params={
                 "chat_id": chat_id,
-                "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + params
+                "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + link_params
             })
 
         

@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # Start polling
     while True:
-        tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 10, "timeout": 60}).json()
+        tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 5, "timeout": 60}).json()
 
         # If there are any updates
         if tg_response["result"]:
