@@ -120,7 +120,7 @@ def updates_manager(tg_update):
         # Else if it's a message that follows the correct format (YouTube_link - HH:MM:SS)
         #
 
-        elif message_text and re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s[0-5]?\d(:[0-5]\d){0,2}$", message_text):
+        elif message_text and re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s\d?\d(:[0-5]\d){0,2}$", message_text):
 
             #
             # Elaborate message
