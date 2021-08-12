@@ -17,7 +17,7 @@ def updates_manager(tg_update):
 
     chat_id = message["chat"]["id"]
     chat_type = message["chat"]["type"]
-    message_text = message["text"]
+    message_text = message.get("text", {})
     message_entities = message.get("entities", {})
     # Check if the message text contains only the command itself
     if (message_entities and message_entities[0]["type"] == "bot_command" and
@@ -106,7 +106,7 @@ def updates_manager(tg_update):
         # Else if it's a message that follows the correct format (YouTube_link - HH:MM:SS)
         #
 
-        elif re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s[0-5]?\d(:[0-5]\d){0,2}$", message_text):
+        elif message_text and re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s[0-5]?\d(:[0-5]\d){0,2}$", message_text):
 
             #
             # Elaborate message
