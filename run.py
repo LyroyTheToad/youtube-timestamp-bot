@@ -12,6 +12,7 @@ if __name__ == "__main__":
     # It's a really ugly and confusing way of doing it but I couldn't find a better one
     try:
         tg_response = requests.get(TG_API + "/getUpdates", params={"limit": 100, "timeout": 0}).json()
+        print("\nRoba\n" + str(tg_response) + "\n")
         latest_update_id = int(tg_response["result"][0]["update_id"])
         while tg_response["result"]:
             tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 100, "timeout": 0}).json()
