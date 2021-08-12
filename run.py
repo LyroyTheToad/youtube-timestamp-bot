@@ -34,6 +34,6 @@ if __name__ == "__main__":
             for tg_update in tg_response["result"]:
                 updates_manager(tg_update)
 
-
-        latest_update_id = int(tg_response["result"][-1]["update_id"])
+            latest_update_id = int(tg_response["result"][-1]["update_id"])
+            
         sleep(0.5)
