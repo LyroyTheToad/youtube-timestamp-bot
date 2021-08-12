@@ -1,8 +1,24 @@
 # Other imports
 import os
+import json
 # (Used during localhost testing to load the environment variables from .env files)
 from dotenv import load_dotenv
 load_dotenv()
+
+
+
+
+
+
+#
+#
+# Updates that the bot will react to
+#
+#
+
+ALLOWED_UPDATES = json.dumps([
+    "message"
+])
 
 
 

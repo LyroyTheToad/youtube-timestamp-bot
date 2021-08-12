@@ -13,40 +13,19 @@ def updates_manager(tg_update):
     #
     #
 
-    #
-    # If it's a message
-    #
+    message = tg_update["message"]
 
-    # Initializing variables to avoid future exceptions
-    chat_id = None
-    chat_type = None
-    message_text = None
-    message_entities = None
-    command = None
-
-
-    # If the update is a message from a channel
-    if "channel_post" in tg_update:
-        channel_post = tg_update["channel_post"]
-
-        chat_type = channel_post["chat"]["type"]
-
-
-    # If the update is a message not from a channel
-    elif "message" in tg_update:
-        message = tg_update["message"]
-
-        chat_id = message["chat"]["id"]
-        chat_type = message["chat"]["type"]
-        message_text = message["text"]
-        message_entities = message.get("entities", {})
-        # Check if the message text contains only the command itself
-        if (message_entities and message_entities[0]["type"] == "bot_command" and
-            message_entities[0]["offset"] == 0 and len(message_text) == message_entities[0]["length"]
-        ):
-            # I know I could have used the <message_text> variable to store
-            # the command but I decided not to to make everything more clear
-            command = message_text
+    chat_id = message["chat"]["id"]
+    chat_type = message["chat"]["type"]
+    message_text = message["text"]
+    message_entities = message.get("entities", {})
+    # Check if the message text contains only the command itself
+    if (message_entities and message_entities[0]["type"] == "bot_command" and
+        message_entities[0]["offset"] == 0 and len(message_text) == message_entities[0]["length"]
+    ):
+        # I know I could have used the <message_text> variable to store
+        # the command but I decided not to to make everything more clear
+        command = message_text
 
 
 
