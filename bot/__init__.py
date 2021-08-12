@@ -1,4 +1,3 @@
-# Other imports
 import os
 import json
 # (Used during localhost testing to load the environment variables from .env files)
@@ -8,12 +7,8 @@ load_dotenv()
 
 
 
-
-
-#
 #
 # Updates that the bot will react to
-#
 #
 
 ALLOWED_UPDATES = json.dumps([
@@ -23,12 +18,17 @@ ALLOWED_UPDATES = json.dumps([
 
 
 
-
-
 #
+# Regex for correctly formatted message
+#
+
+MESSAGE_REGEX = "^(?:https?:\/\/)?(?:(?:www\.|m.)?youtube\.com\/watch\?v=|youtu.be\/)((?:[a-zA-Z0-9]|-|_){11})(&.*)?\s\d?\d(:[0-5]\d){0,2}$"
+
+
+
+
 #
 # Load environment variables
-#
 #
 
 TOKEN = os.environ["TOKEN"]

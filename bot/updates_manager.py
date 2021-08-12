@@ -1,7 +1,8 @@
 # Package imports
-from bot import TG_API, DEBUG_PRINTS
+from bot import TG_API, DEBUG_PRINTS, MESSAGE_REGEX
 # Web tools imports
 import requests
+import pafy
 # Other imports
 import re
 
@@ -87,9 +88,7 @@ def updates_manager(tg_update):
             elif command == "/help":
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,
-                    "text": "You must use the format  `<YouTube link\> HH:MM:SS`\n\nExample:\nhttps://youtu\.be/dQw4w9WgXcQ 2:47\n\n"+
-                            "❗️*IMPORTANT*❗️\n" +
-                            "The bot __DOES NOT__ check if the timestamp overflows the duration of the video\!",
+                    "text": "You must use the format  `<YouTube link\> HH:MM:SS`\n\nExample:\nhttps://youtu\.be/dQw4w9WgXcQ 2:47\n\n",
                     "parse_mode": "MarkdownV2",
                     "disable_web_page_preview": True
                 })
@@ -106,8 +105,6 @@ def updates_manager(tg_update):
                     "chat_id": chat_id,
                     "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app\." +
                             "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic\.\n" +
-                            "❗️*IMPORTANT*❗️\n" +
-                            "The bot __DOES NOT__ check if the timestamp overflows the duration of the video\!\n" +
                             "This bot __DOES NOT__ save any data and __WILL NOT__ send you any ads\!\n\n" +
                             "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me\.\n" +
                             "You can find the code here https://github\.com/LyroyTheToad/youtube\-timestamp\-bot",
@@ -124,7 +121,7 @@ def updates_manager(tg_update):
         # Else if it's a message that follows the correct format (YouTube_link - HH:MM:SS)
         #
 
-        elif message_text and re.search("^http(?:s?):\/\/(?:(?:www|m)\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s\d?\d(:[0-5]\d){0,2}$", message_text):
+        elif message_text and (groups := re.search(MESSAGE_REGEX, message_text)):
 
             #
             # Elaborate message
@@ -132,41 +129,50 @@ def updates_manager(tg_update):
 
             # Separate sections
             message_text = message_text.split(" ")
-            yt_link = message_text[0]
-            time = re.split(":", message_text[1])
+            video_id = groups.group(1)
+            params = groups.group(2)
+            starting_time = re.split(":", message_text[1])
+
+
+            # Remove every "t" parameter
+            while (t_param := re.search("&t=[^&]*", params)):
+                params = params.replace(t_param.group(), "")
+
+
+            # Check for the YouTube link validity
+            try:
+                video = pafy.new(video_id)
+            except OSError:
+                requests.get(TG_API + "/sendMessage", params={
+                    "chat_id": chat_id,
+                    "text": "The sent link is not a valid YouTube link!"
+                })
+                return
+
 
             # Calculate time in seconds
-            if len(time) == 1:
-                time = int(time[0])
-            elif len(time) == 2:
-                time = int(time[0]) * 60 + int(time[1])
+            if len(starting_time) == 1:
+                starting_time = int(starting_time[0])
+            elif len(starting_time) == 2:
+                starting_time = int(starting_time[0]) * 60 + int(starting_time[1])
             else:
-                time = int(time[0]) * 24 * 60 + int(time[1]) * 60 + int(time[2])
+                starting_time = int(starting_time[0]) * 24 * 60 + int(starting_time[1]) * 60 + int(starting_time[2])
 
-
-
-
-            #
-            # Check for link type
-            #
-
-            # If it's a short link
-            if yt_link.find("/watch?v=") == -1:
-
-                # Send back modified link
+            
+            # Check if the specified duration overflows the video duration
+            if starting_time > video.length:
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,
-                    "text": yt_link + "?t=" + str(time)
+                    "text": "The specified time overflows the duration of the video!"
                 })
+                return
 
-            # If it's a long link
-            else:
-                
-                # Send back modified link
-                requests.get(TG_API + "/sendMessage", params={
-                    "chat_id": chat_id,
-                    "text": yt_link + "&t=" + str(time)
-                })
+
+            # Send back modified link
+            requests.get(TG_API + "/sendMessage", params={
+                "chat_id": chat_id,
+                "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + params
+            })
 
         
 
