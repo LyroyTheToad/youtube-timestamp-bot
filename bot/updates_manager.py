@@ -156,7 +156,7 @@ def updates_manager(tg_update):
             elif len(starting_time) == 2:
                 starting_time = int(starting_time[0]) * 60 + int(starting_time[1])
             else:
-                starting_time = int(starting_time[0]) * 24 * 60 + int(starting_time[1]) * 60 + int(starting_time[2])
+                starting_time = int(starting_time[0]) * 60 * 60 + int(starting_time[1]) * 60 + int(starting_time[2])
 
             
             # Check if the specified duration overflows the video duration
