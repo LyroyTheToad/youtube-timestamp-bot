@@ -141,6 +141,7 @@ def updates_manager(tg_update):
 
 
 
+
             #
             # Check for link type
             #
