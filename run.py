@@ -4,6 +4,7 @@ import requests
 from bot import TG_API, ALLOWED_UPDATES, DEBUG_PRINTS
 from bot.updates_manager import updates_manager
 # Other imports
+from threading import Thread
 from time import sleep
 
 if __name__ == "__main__":
@@ -35,7 +36,7 @@ if __name__ == "__main__":
 
             # Elaborate each update one by one
             for tg_update in tg_response["result"]:
-                updates_manager(tg_update)
+                Thread(target=updates_manager, args=[tg_update]).start()
 
             latest_update_id = int(tg_response["result"][-1]["update_id"])
 
