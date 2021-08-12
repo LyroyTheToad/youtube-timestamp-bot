@@ -26,6 +26,8 @@ def updates_manager(tg_update):
         # I know I could have used the <message_text> variable to store
         # the command but I decided not to to make everything more clear
         command = message_text
+    else:
+        command = None
 
 
 
