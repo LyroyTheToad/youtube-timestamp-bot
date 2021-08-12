@@ -159,7 +159,7 @@ def updates_manager(tg_update):
                 starting_time = int(starting_time[0]) * 60 * 60 + int(starting_time[1]) * 60 + int(starting_time[2])
 
             
-            # Check if the specified duration overflows the video duration
+            # Check if the specified starting time overflows the video duration
             if starting_time > video.length:
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,
@@ -168,7 +168,12 @@ def updates_manager(tg_update):
                 return
 
 
+
+
+            #
             # Send back modified link
+            #
+
             requests.get(TG_API + "/sendMessage", params={
                 "chat_id": chat_id,
                 "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + params
