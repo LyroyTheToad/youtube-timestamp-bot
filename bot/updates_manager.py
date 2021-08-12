@@ -88,7 +88,8 @@ def updates_manager(tg_update):
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,
                     "text": "You must use the format  `<YouTube link\> HH:MM:SS`\n\nExample:\nhttps://youtu\.be/dQw4w9WgXcQ 2:47\n\n"+
-                            "❗️*IMPORTANT*❗️\nThe bot __DOES NOT__ check if the timestamp overflows the duration of the video\!",
+                            "❗️*IMPORTANT*❗️\n" +
+                            "The bot __DOES NOT__ check if the timestamp overflows the duration of the video\!",
                     "parse_mode": "MarkdownV2",
                     "disable_web_page_preview": True
                 })
@@ -103,11 +104,14 @@ def updates_manager(tg_update):
             elif command == "/about":
                 requests.get(TG_API + "/sendMessage", params={
                     "chat_id": chat_id,
-                    "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app." +
-                            "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic.\n" +
-                            "This bot DOES NOT save any data and WILL NOT send you any ads!\n\n" +
-                            "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me.\n" +
-                            "You can find the code here https://github.com/LyroyTheToad/youtube-timestamp-bot",
+                    "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app\." +
+                            "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic\.\n" +
+                            "❗️*IMPORTANT*❗️\n" +
+                            "The bot __DOES NOT__ check if the timestamp overflows the duration of the video\!\n" +
+                            "This bot __DOES NOT__ save any data and __WILL NOT__ send you any ads\!\n\n" +
+                            "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me\.\n" +
+                            "You can find the code here https://github\.com/LyroyTheToad/youtube\-timestamp\-bot",
+                            "parse_mode": "MarkdownV2",
                             "disable_web_page_preview": True
                 })
 
@@ -120,7 +124,7 @@ def updates_manager(tg_update):
         # Else if it's a message that follows the correct format (YouTube_link - HH:MM:SS)
         #
 
-        elif message_text and re.search("^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s\d?\d(:[0-5]\d){0,2}$", message_text):
+        elif message_text and re.search("^http(?:s?):\/\/(?:(?:www|m)\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?\s\d?\d(:[0-5]\d){0,2}$", message_text):
 
             #
             # Elaborate message
