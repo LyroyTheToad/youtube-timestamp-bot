@@ -1,4 +1,6 @@
 # Web tools imports
+from logging import debug
+import threading
 import requests
 # Package imports
 from bot import TG_API, ALLOWED_UPDATES, DEBUG_PRINTS
@@ -22,6 +24,10 @@ if __name__ == "__main__":
         latest_update_id = 0
 
 
+    # Number of threads with "target=updates_manager"
+    um_thread_n = 1
+
+
     print("Bot started!")
 
     # Start polling
@@ -38,14 +44,35 @@ if __name__ == "__main__":
         # If there are any updates
         if tg_response["result"]:
 
-            if DEBUG_PRINTS:
-                print("\n\nUpdate:\n" + str(tg_response))
-
             # Elaborate each update one by one
             for tg_update in tg_response["result"]:
-                Thread(target=updates_manager, args=[tg_update]).start()
+
+                # Keep counting running "update manager" threads
+                while True:
+                    um_thread_n = 1
+
+                    # Count running "update manager" threads
+                    for thread in threading.enumerate():
+                        if thread.name.startswith("um_thread-"):
+                            um_thread_n += 1
+
+                    # If there aren't more than 10 running "update manager" threads exit
+                    if not um_thread_n > 10:
+                        break
+
+                    # Wait 0.1s before counting again
+                    sleep(0.1)
+                
+
+                if DEBUG_PRINTS:
+                    print("\n\nUpdate:\n" + str(tg_response) + "\n\nStarting thread n." + str(um_thread_n))
+
+                # Elaborate update in another thread
+                Thread(target=updates_manager, args=[tg_update], name="um_thread-" + str(um_thread_n)).start()
+
 
             latest_update_id = int(tg_response["result"][-1]["update_id"])
 
 
+        # Wait half a second before checking for new updates
         sleep(0.5)

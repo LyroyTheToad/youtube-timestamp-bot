@@ -6,8 +6,9 @@ import pafy
 # Other imports
 import re
 from time import sleep
-def updates_manager(tg_update):
 
+def updates_manager(tg_update):
+    
     #
     #
     # Saving necessary info
@@ -42,10 +43,10 @@ def updates_manager(tg_update):
     #
 
     if DEBUG_PRINTS:
-        print("\nchat_id: " + str(chat_id) + "\nchat_type: " + str(chat_type) + "\nmessage_text: " + str(message_text) + "\ncommand: " + str(command))
+        print("\nmessage_text: " + str(message_text) + "\ncommand: " + str(command))
 
 
-
+    
 
 
 
@@ -58,7 +59,7 @@ def updates_manager(tg_update):
     #
     # If the update comes from a private chat
     #
-    sleep(10)
+    
     if chat_type == "private":
 
         #
@@ -120,6 +121,7 @@ def updates_manager(tg_update):
 
                 # Retry if failed
                 except:
+                    sleep(10)
                     continue
 
                 # Exit from while if succeeded
@@ -175,6 +177,7 @@ def updates_manager(tg_update):
                                     "text": "The sent link is not a valid YouTube link!"
                                 })
                             except:
+                                sleep(10)
                                 continue
                             break
                         return
@@ -201,6 +204,7 @@ def updates_manager(tg_update):
                             "text": "The specified time overflows the duration of the video!"
                         })
                     except:
+                        sleep(10)
                         continue
                     break
                 return
@@ -218,6 +222,7 @@ def updates_manager(tg_update):
                         "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + link_params
                     })
                 except:
+                    sleep(10)
                     continue
                 break
 
@@ -239,5 +244,6 @@ def updates_manager(tg_update):
                         "parse_mode": "MarkdownV2"
                     })
                 except:
+                    sleep(10)
                     continue
                 break
