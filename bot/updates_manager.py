@@ -5,7 +5,7 @@ import requests
 import pafy
 # Other imports
 import re
-
+from time import sleep
 def updates_manager(tg_update):
 
     #
@@ -58,7 +58,7 @@ def updates_manager(tg_update):
     #
     # If the update comes from a private chat
     #
-
+    sleep(10)
     if chat_type == "private":
 
         #
@@ -67,55 +67,68 @@ def updates_manager(tg_update):
 
         if command:
 
-            #
-            # Start command
-            #
+            # The while is used to retry in case of exception
+            while True:
 
-            if command == "/start":
-                requests.get(TG_API + "/sendMessage", params={
-                    "chat_id": chat_id,
-                    "text": "Send a message in the format  `<YouTube link\> HH:MM:SS `to get your modified YouTube link\!",
-                    "parse_mode": "MarkdownV2"
-                })
+                # Try to make a requests to Telegram severs
+                try:
 
+                    #
+                    # Start command
+                    #
 
-
-
-            #
-            # Help command
-            #
-
-            elif command == "/help":
-                requests.get(TG_API + "/sendMessage", params={
-                    "chat_id": chat_id,
-                    "text": "You must use the format  `<YouTube link\> HH:MM:SS`\n\nExample:\nhttps://youtu\.be/dQw4w9WgXcQ 2:47\n\n",
-                    "parse_mode": "MarkdownV2",
-                    "disable_web_page_preview": True
-                })
+                    if command == "/start":
+                        requests.get(TG_API + "/sendMessage", params={
+                            "chat_id": chat_id,
+                            "text": "Send a message in the format  `<YouTube link\> HH:MM:SS `to get your modified YouTube link\!",
+                            "parse_mode": "MarkdownV2"
+                        })
 
 
 
 
-            #
-            # About command
-            #
+                    #
+                    # Help command
+                    #
 
-            elif command == "/about":
-                requests.get(TG_API + "/sendMessage", params={
-                    "chat_id": chat_id,
-                    "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app\." +
-                            "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic\.\n" +
-                            "This bot __DOES NOT__ save any data and __WILL NOT__ send you any ads\!\n\n" +
-                            "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me\.\n" +
-                            "You can find the code here https://github\.com/LyroyTheToad/youtube\-timestamp\-bot",
+                    elif command == "/help":
+                        requests.get(TG_API + "/sendMessage", params={
+                            "chat_id": chat_id,
+                            "text": "You must use the format  `<YouTube link\> HH:MM:SS`\n\nExample:\nhttps://youtu\.be/dQw4w9WgXcQ 2:47\n\n",
                             "parse_mode": "MarkdownV2",
                             "disable_web_page_preview": True
-                })
+                        })
 
 
 
 
+                    #
+                    # About command
+                    #
 
+                    elif command == "/about":
+                        requests.get(TG_API + "/sendMessage", params={
+                            "chat_id": chat_id,
+                            "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app\." +
+                                    "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic\.\n" +
+                                    "This bot __DOES NOT__ save any data and __WILL NOT__ send you any ads\!\n\n" +
+                                    "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me\.\n" +
+                                    "You can find the code here https://github\.com/LyroyTheToad/youtube\-timestamp\-bot",
+                                    "parse_mode": "MarkdownV2",
+                                    "disable_web_page_preview": True
+                        })
+
+                # Retry if failed
+                except:
+                    continue
+
+                # Exit from while if succeeded
+                break
+
+
+
+
+    
 
         #
         # Else if it's a message that follows the correct format (YouTube_link - HH:MM:SS)
@@ -141,15 +154,33 @@ def updates_manager(tg_update):
                 link_params = link_params.replace(t_param.group(), "")
 
 
-            # Check for the YouTube link validity
-            try:
-                video = pafy.new(video_id)
-            except OSError:
-                requests.get(TG_API + "/sendMessage", params={
-                    "chat_id": chat_id,
-                    "text": "The sent link is not a valid YouTube link!"
-                })
-                return
+            # Check if the YouTube video exists
+            while True:
+
+                try:
+                    video = pafy.new(video_id)
+                except Exception as exc:
+
+                    print (exc)
+                    # If it failed connecting retry
+                    if str(exc).find("[Errno 11001]") != -1:
+                        continue
+
+                    # If the video doesn't exist
+                    elif str(exc).find("Video unavailable") != -1:
+                        while True:
+                            try:
+                                requests.get(TG_API + "/sendMessage", params={
+                                    "chat_id": chat_id,
+                                    "text": "The sent link is not a valid YouTube link!"
+                                })
+                            except:
+                                continue
+                            break
+                        return
+
+                # Exit from while if it succeeded
+                break
 
 
             # Calculate time in seconds
@@ -163,10 +194,15 @@ def updates_manager(tg_update):
             
             # Check if the specified starting time overflows the video duration
             if starting_time > video.length:
-                requests.get(TG_API + "/sendMessage", params={
-                    "chat_id": chat_id,
-                    "text": "The specified time overflows the duration of the video!"
-                })
+                while True:
+                    try:
+                        requests.get(TG_API + "/sendMessage", params={
+                            "chat_id": chat_id,
+                            "text": "The specified time overflows the duration of the video!"
+                        })
+                    except:
+                        continue
+                    break
                 return
 
 
@@ -175,11 +211,15 @@ def updates_manager(tg_update):
             #
             # Send back modified link
             #
-
-            requests.get(TG_API + "/sendMessage", params={
-                "chat_id": chat_id,
-                "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + link_params
-            })
+            while True:
+                try:
+                    requests.get(TG_API + "/sendMessage", params={
+                        "chat_id": chat_id,
+                        "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + link_params
+                    })
+                except:
+                    continue
+                break
 
         
 
@@ -191,8 +231,13 @@ def updates_manager(tg_update):
         #
 
         else:
-            requests.get(TG_API + "/sendMessage", params={
-                "chat_id": chat_id,
-                "text": "Send a message in the format  `<YouTube link\> HH:MM:SS `to get your modified YouTube link\!",
-                "parse_mode": "MarkdownV2"
-            })
+            while True:
+                try:
+                    requests.get(TG_API + "/sendMessage", params={
+                        "chat_id": chat_id,
+                        "text": "Send a message in the format  `<YouTube link\> HH:MM:SS `to get your modified YouTube link\!",
+                        "parse_mode": "MarkdownV2"
+                    })
+                except:
+                    continue
+                break

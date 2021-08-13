@@ -26,7 +26,14 @@ if __name__ == "__main__":
 
     # Start polling
     while True:
-        tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 5, "timeout": 60}).json()
+        
+        # Try to make a requests to Telegram severs
+        try:
+            tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 5, "timeout": 1}).json()
+        except:
+            sleep(10)
+            continue
+
 
         # If there are any updates
         if tg_response["result"]:
@@ -39,5 +46,6 @@ if __name__ == "__main__":
                 Thread(target=updates_manager, args=[tg_update]).start()
 
             latest_update_id = int(tg_response["result"][-1]["update_id"])
+
 
         sleep(0.5)
