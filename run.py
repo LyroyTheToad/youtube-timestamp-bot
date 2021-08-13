@@ -29,7 +29,7 @@ if __name__ == "__main__":
         
         # Try to make a requests to Telegram severs
         try:
-            tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 5, "timeout": 1}).json()
+            tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 5, "timeout": 60}).json()
         except:
             sleep(10)
             continue
