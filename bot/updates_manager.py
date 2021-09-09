@@ -144,16 +144,12 @@ def updates_manager(tg_update):
 
             # Separate sections
             message_text = message_text.split(" ")
-            video_id = groups.group(1)
-            # If there are no parameters set it an empty string
-            if not (link_params := groups.group(2)):
-                link_params = ""
+            video_id = None
+            for i in range(1, 5):
+                video_id = groups.group(i)
+                if video_id:
+                    break
             starting_time = re.split(":", message_text[1])
-
-
-            # Remove every "t" parameter
-            while link_params and (t_param := re.search("&t=[^&]*", link_params)):
-                link_params = link_params.replace(t_param.group(), "")
 
 
             # Check if the YouTube video exists
@@ -219,7 +215,7 @@ def updates_manager(tg_update):
                 try:
                     requests.get(TG_API + "/sendMessage", params={
                         "chat_id": chat_id,
-                        "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time) + link_params
+                        "text": "https://www.youtube.com/watch?v=" + video_id + "&t=" + str(starting_time)
                     })
                 except:
                     sleep(10)
