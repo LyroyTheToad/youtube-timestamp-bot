@@ -163,7 +163,7 @@ def updates_manager(tg_update):
                     video = pafy.new(video_id)
                 except Exception as exc:
 
-                    print (exc)
+                    
                     # If it failed connecting retry
                     if str(exc).find("[Errno 11001]") != -1:
                         continue
