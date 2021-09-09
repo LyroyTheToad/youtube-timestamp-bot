@@ -110,10 +110,10 @@ def updates_manager(tg_update):
                     elif command == "/about":
                         requests.get(TG_API + "/sendMessage", params={
                             "chat_id": chat_id,
-                            "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app\." +
-                                    "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic\.\n" +
+                            "text": "This bot was made because you can't copy a link that starts a video at a certain time using the official YouTube mobile app\. " +
+                                    "Please use this bot only if you are from a mobile device and not from Desktop to reduce traffic\.\n\n" +
                                     "This bot __DOES NOT__ save any data and __WILL NOT__ send you any ads\!\n\n" +
-                                    "The creator of this bot is @Lyroy_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me\.\n" +
+                                    "The creator of this bot is @Lyroy\_TheToad, if there are any problems with the bot or you want to request a feature fell free to ask me\.\n" +
                                     "You can find the code here https://github\.com/LyroyTheToad/youtube\-timestamp\-bot",
                                     "parse_mode": "MarkdownV2",
                                     "disable_web_page_preview": True
