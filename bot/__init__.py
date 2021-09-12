@@ -22,7 +22,7 @@ ALLOWED_UPDATES = json.dumps([
 # Regex for correctly formatted message
 #
 
-MESSAGE_REGEX = "^(?:https?:\/\/|\/\/)?(?:(?:www\.|m\.)?youtube(?:-nocookie)?\.com\/(?:(?:vi?|e|embed)\/([\w-]{11})|(?:watch|embed|attribution_link)?\?\S*?(?:(?<=\?v=|&v=)|(?<=\?vi=|&vi=))([\w-]{11}))|youtu\.be\/(?:([\w-]{11})(?!\S*v=)|\S*?(?:&v=|\?v=)([\w-]{11})))(?:[^\w\s-]\S*)?$"
+MESSAGE_REGEX = "^(?:https?:\/\/|\/\/)?(?:(?:www\.|m\.)?youtube(?:-nocookie)?\.com\/(?:(?:vi?|e|embed)\/([\w-]{11})|(?:watch|embed|attribution_link)?\?\S*?(?:(?<=\?v=|&v=)|(?<=\?vi=|&vi=))([\w-]{11}))|youtu\.be\/(?:([\w-]{11})(?!\S*v=)|\S*?(?:&v=|\?v=)([\w-]{11})))(?:[^\w-]\S*)?\s\d?\d(:[0-5]\d){0,2}$"
 
 
 
