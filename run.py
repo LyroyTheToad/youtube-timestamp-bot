@@ -15,17 +15,13 @@ if __name__ == "__main__":
     # It's a really ugly and confusing way of doing it but I couldn't find a better one
     try:
         tg_response = requests.get(TG_API + "/getUpdates", params={"limit": 100, "timeout": 0, "allowed_updates": ALLOWED_UPDATES}).json()
-        latest_update_id = int(tg_response["result"][0]["update_id"])
+        latest_update_id = int(tg_response["result"][-1]["update_id"])
         while tg_response["result"]:
             tg_response = requests.get(TG_API + "/getUpdates", params={"offset": latest_update_id + 1, "limit": 100, "timeout": 0}).json()
             if tg_response["result"]:
-                latest_update_id = int(tg_response["result"][0]["update_id"])
+                latest_update_id = int(tg_response["result"][-1]["update_id"])
     except IndexError:
         latest_update_id = 0
-
-
-    # Number of threads with "target=updates_manager"
-    um_thread_n = 1
 
 
     print("Bot started!")
@@ -42,7 +38,7 @@ if __name__ == "__main__":
 
 
         # If there are any updates
-        if tg_response["result"]:
+        if tg_response.get("result", {}):
 
             # Elaborate each update one by one
             for tg_update in tg_response["result"]:
