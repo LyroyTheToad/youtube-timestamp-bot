@@ -9,7 +9,7 @@ from bot.updates_manager import updates_manager
 from threading import Thread
 from time import sleep
 
-if __name__ == "__main__":
+def main():
 
     # Ignore updates sent while the bot was off (max limit for "getUpdates" method is 100)
     # It's a really ugly and confusing way of doing it but I couldn't find a better one
@@ -72,3 +72,10 @@ if __name__ == "__main__":
 
         # Wait half a second before checking for new updates
         sleep(0.5)
+
+
+
+
+
+if __name__ == "__main__":
+    main()
